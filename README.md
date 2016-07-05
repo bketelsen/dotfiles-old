@@ -12,8 +12,8 @@ This repo is meant to store configuration files which are then symlinked by usin
 <pre>
 cd ~/
 git clone git@github.com:bketelsen/dotfiles.git
-git submodule update --init --recursive
 cd dotfiles
+git submodule update --init --recursive
 </pre>
 
 ##### Link dotfiles
