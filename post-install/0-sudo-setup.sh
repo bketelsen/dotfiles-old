@@ -1,3 +1,3 @@
 #!/bin/bash
 
-cat 'umask 022' > /etc/profile
+echo 'umask 022' >> /etc/profile
