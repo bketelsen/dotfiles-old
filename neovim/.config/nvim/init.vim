@@ -111,7 +111,7 @@ if has("gui_macvim")
 
   let macvim_skip_colorscheme=1
   " let g:molokai_original=1
-  colorscheme molokai
+  "colorscheme molokai
   highlight SignColumn guibg=#272822
 
   " Open goto symbol on current buffer
@@ -166,8 +166,8 @@ else
   endif
 
   let g:rehash256 = 1
-  set background=dark
-  colorscheme molokai
+  "set background=dark
+  "colorscheme molokai
 endif
 
 

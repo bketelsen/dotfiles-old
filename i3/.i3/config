@@ -16,7 +16,7 @@ set $mod Mod1
 # This font is widely installed, provides lots of unicode glyphs, right-to-left
 # text rendering and scalability on retina/hidpi displays (thanks to pango).
 #font pango:DejaVu Sans Mono 8
-font pango:Source Code Pro for Powerline 20
+font pango:Source Code Pro for Powerline 12
 # Before i3 v4.8, we used to recommend this one as the default:
 # font -misc-fixed-medium-r-normal--13-120-75-75-C-70-iso10646-1
 # The font above is very space-efficient, that is, it looks good, sharp and
@@ -166,7 +166,7 @@ bindsym Print exec scrot '%Y-%m-%d_%T_scrot.png' -e 'mv $f ~/Pictures/Screenshot
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
 bar {
-    status_command    i3blocks
+    status_command    i3status
     position          top
     mode dock
     workspace_buttons yes
@@ -185,10 +185,10 @@ new_window pixel 1
 workspace_auto_back_and_forth yes
 
 #--glx-no-stencil, --paint-on-overlay, --glx-no-rebind-pixmap, and --glx-swap-method 3 --vsync opengl --glx-use-copysubbuffermesa
-exec --no-startup-id gnome-settings-daemon
-exec --no-startup-id gnome-session-manager
-exec --no-startup-id /usr/bin/nm-applet
-exec --no-startup-id xrandr --output DP-1 --left-of eDP-1
+#exec --no-startup-id gnome-settings-daemon
+#exec --no-startup-id gnome-session-manager
+#exec --no-startup-id /usr/bin/nm-applet
+#exec --no-startup-id xrandr --output DP-1 --left-of eDP-1
 
 ### THEME ###
 
