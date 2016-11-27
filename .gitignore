@@ -10,3 +10,7 @@ neovim/.config/nvim/tmp/
 neovim/.config/nvim/.init.vim-rplugin~
 neovim/.config/nvim/plugged/
 
+neovim/.config/gocode/
+neovim/.config/htop/
+neovim/.config/nvim/.netwhist
+neovim/.config/nvim/.netrwhist
