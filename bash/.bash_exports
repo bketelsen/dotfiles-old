@@ -1,0 +1,5 @@
+export GOPATH=~
+export PATH=$GOPATH/bin:/usr/local/go/bin:$PATH
+export DOCKER_HOST=tcp://0.0.0.0:2375
+export DISPLAY=:0.0
+export EDITOR=nvim
