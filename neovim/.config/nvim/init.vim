@@ -1,38 +1,32 @@
 call plug#begin('~/.config/nvim/plugged')
 
-Plug 'fatih/vim-go'
 Plug 'AndrewRadev/splitjoin.vim'
+Plug 'ConradIrwin/vim-bracketed-paste'
 Plug 'Raimondi/delimitMate'
+Plug 'SirVer/ultisnips'
+Plug 'corylanou/vim-present', {'for' : 'present'}
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'itchyny/lightline.vim'
+Plug 'ekalinin/Dockerfile.vim', {'for' : 'Dockerfile'}
+Plug 'elzr/vim-json', {'for' : 'json'}
+Plug 'fatih/vim-go'
+Plug 'fatih/badwolf'
+Plug 'w0ng/vim-hybrid'
 Plug 'tomasr/molokai'
+Plug 'chriskempson/base16-vim'
+Plug 'scrooloose/nerdtree'
+Plug 't9md/vim-choosewin'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-scriptease'
-Plug 'tpope/vim-vinegar'
-Plug 'ConradIrwin/vim-bracketed-paste'
 Plug 'unblevable/quick-scope'  
-Plug 'scrooloose/nerdtree'
-Plug 'majutsushi/tagbar'
-Plug 'scrooloose/syntastic'
-Plug 'Shougo/neopairs.vim'
-Plug 'Shougo/neosnippet.vim'
-Plug 'Shougo/neosnippet-snippets'
-Plug 'Shougo/vimproc'
+Plug 'Shougo/deoplete.nvim'
+Plug 'zchee/deoplete-go', { 'do': 'make'}
 
-if has('nvim')
-  Plug 'Shougo/deoplete.nvim'
-  Plug 'zchee/deoplete-go', { 'do': 'make'}
-else
-  Plug 'Shougo/neocomplete.vim'
-endif
-
-" filetype plugins
-Plug 'vim-ruby/vim-ruby'
-Plug 'elzr/vim-json', {'for' : 'json'}
-Plug 'ekalinin/Dockerfile.vim', {'for' : 'Dockerfile'}
-Plug 'corylanou/vim-present', {'for' : 'present'}
+" beta usage. These are plugins I try for a while and if I like them enough
+" I'll move them up
+" Plug 'maralla/completor.vim'
 
 call plug#end()
 
@@ -57,12 +51,12 @@ if !has('nvim')
   set backspace=indent,eol,start  " Makes backspace key more powerful.
   set incsearch                   " Shows the match while typing
   set hlsearch                    " Highlight found searches
+  set mouse=a      
 endif
 
 set noerrorbells             " No beeps
 set number                   " Show line numbers
 set showcmd                  " Show me what I'm typing
-set showmode                 " Show current mode.
 set noswapfile               " Don't use swapfile
 set nobackup                 " Don't create annoying backup files
 set splitright               " Split vertical windows right to the current windows
@@ -71,13 +65,13 @@ set autowrite                " Automatically save before :next, :make etc.
 set hidden
 set fileformats=unix,dos,mac " Prefer Unix over Windows over OS 9 formats
 set noshowmatch              " Do not show matching brackets by flickering
-set nocursorcolumn
 set noshowmode               " We show the mode with airline or lightline
 set ignorecase               " Search case insensitive...
 set smartcase                " ... but not it begins with upper case 
 set completeopt=menu,menuone
 set nocursorcolumn           " speed up syntax highlighting
 set nocursorline
+set updatetime=400
 
 set pumheight=10             " Completion window max size
 
@@ -85,10 +79,9 @@ set pumheight=10             " Completion window max size
 set clipboard^=unnamed
 set clipboard^=unnamedplus
 
+set viminfo='200
+
 set lazyredraw          " Wait to redraw
-syntax sync minlines=256
-set synmaxcol=300
-set re=1
 
 if has('persistent_undo')
   set undofile
@@ -97,7 +90,7 @@ endif
 
 if has("gui_macvim")
   " No toolbars, menu or scrollbars in the GUI
-  set guifont=Source\ Code\ Pro\ Light:h12
+  set guifont=Source\ Code\ Pro:h13
   set clipboard+=unnamed
   set vb t_vb=
   set guioptions-=m  "no menu
@@ -108,9 +101,7 @@ if has("gui_macvim")
   set guioptions-=R
 
   let macvim_skip_colorscheme=1
-  " let g:molokai_original=1
-  "colorscheme molokai
-  highlight SignColumn guibg=#272822
+  colorscheme molokai
 
   " Open goto symbol on current buffer
   nmap <D-r> :MyCtrlPTag<cr>
@@ -161,39 +152,119 @@ else
   if has('!nvim')
     syntax enable
     set t_Co=256
+    set term=ansi
   endif
 
   let g:rehash256 = 1
-  "set background=dark
-  "colorscheme molokai
+  set background=dark
+  let g:molokai_original = 1
+  colorscheme molokai
 endif
-
-
-" For toggling
-noremap <Leader>n :<C-u>call g:NerdTreeFindToggle()<cr>
-
-nnoremap <silent> <F2> :NERDTreeFind<CR>
-noremap <F3> :NERDTreeToggle<CR>
-map <F3> :NERDTreeToggle<CR>
-map <F2> :NERDTreeFind<CR>
-
 
 " open help vertically
 command! -nargs=* -complete=help Help vertical belowright help <args>
 autocmd FileType help wincmd L
 
-autocmd BufNewFile,BufRead *.go setlocal noet ts=4 sw=4 sts=4
-au BufNewFile,BufRead *.vim setlocal noet ts=2 sw=2 sts=2
-au BufNewFile,BufRead *.txt setlocal noet ts=4 sw=4
-au BufNewFile,BufRead *.md setlocal noet ts=4 sw=4
+autocmd BufNewFile,BufRead *.go setlocal noexpandtab tabstop=4 shiftwidth=4 
+autocmd BufNewFile,BufRead *.ino setlocal noet ts=4 sw=4 sts=4
+autocmd BufNewFile,BufRead *.txt setlocal noet ts=4 sw=4
+autocmd BufNewFile,BufRead *.md setlocal noet ts=4 sw=4
+autocmd BufNewFile,BufRead *.vim setlocal expandtab shiftwidth=2 tabstop=2
+autocmd BufNewFile,BufRead *.hcl setlocal expandtab shiftwidth=2 tabstop=2
 
 autocmd FileType json setlocal expandtab shiftwidth=2 tabstop=2
 autocmd FileType ruby setlocal expandtab shiftwidth=2 tabstop=2
 
 augroup filetypedetect
-  au BufNewFile,BufRead .tmux.conf*,tmux.conf* setf tmux
-  au BufNewFile,BufRead .nginx.conf*,nginx.conf* setf nginx
+  autocmd BufNewFile,BufRead .tmux.conf*,tmux.conf* setf tmux
+  autocmd BufNewFile,BufRead .nginx.conf*,nginx.conf* setf nginx
+  autocmd BufNewFile,BufRead *.hcl setf conf
 augroup END
+
+"=====================================================
+"===================== STATUSLINE ====================
+
+" let s:modes = {
+"       \ 'n': 'NORMAL', 
+"       \ 'i': 'INSERT', 
+"       \ 'R': 'REPLACE', 
+"       \ 'v': 'VISUAL', 
+"       \ 'V': 'V-LINE', 
+"       \ "\<C-v>": 'V-BLOCK',
+"       \ 'c': 'COMMAND',
+"       \ 's': 'SELECT', 
+"       \ 'S': 'S-LINE', 
+"       \ "\<C-s>": 'S-BLOCK', 
+"       \ 't': 'TERMINAL'
+"       \}
+
+" let s:prev_mode = ""
+" function! StatusLineMode()
+"   let cur_mode = get(s:modes, mode(), '')
+
+"   " do not update higlight if the mode is the same
+"   if cur_mode == s:prev_mode
+"     return cur_mode
+"   endif
+
+"   if cur_mode == "NORMAL"
+"     exe 'hi! StatusLine ctermfg=236'
+"     exe 'hi! myModeColor cterm=bold ctermbg=148 ctermfg=22'
+"   elseif cur_mode == "INSERT"
+"     exe 'hi! myModeColor cterm=bold ctermbg=23 ctermfg=231'
+"   elseif cur_mode == "VISUAL" || cur_mode == "V-LINE" || cur_mode == "V_BLOCK"
+"     exe 'hi! StatusLine ctermfg=236'
+"     exe 'hi! myModeColor cterm=bold ctermbg=208 ctermfg=88'
+"   endif
+
+"   let s:prev_mode = cur_mode
+"   return cur_mode
+" endfunction
+
+" function! StatusLineFiletype()
+"   return winwidth(0) > 70 ? (strlen(&filetype) ? &filetype : 'no ft') : ''
+" endfunction
+
+" function! StatusLinePercent()
+"   return (100 * line('.') / line('$')) . '%'
+" endfunction
+
+" function! StatusLineLeftInfo()
+"  let branch = fugitive#head()
+"  let filename = '' != expand('%:t') ? expand('%:t') : '[No Name]'
+"  if branch !=# ''
+"    return printf("%s | %s", branch, filename)
+"  endif
+"  return filename
+" endfunction
+
+" exe 'hi! myInfoColor ctermbg=240 ctermfg=252'
+
+" " start building our statusline
+" set statusline=
+
+" " mode with custom colors
+" set statusline+=%#myModeColor#
+" set statusline+=%{StatusLineMode()}               
+" set statusline+=%*
+
+" " left information bar (after mode)
+" set statusline+=%#myInfoColor#
+" set statusline+=\ %{StatusLineLeftInfo()}
+" set statusline+=\ %*
+
+" " go command status (requires vim-go)
+" set statusline+=%#goStatuslineColor#
+" set statusline+=%{go#statusline#Show()}
+" set statusline+=%*
+
+" " right section seperator
+" set statusline+=%=
+
+" " filetype, percentage, line number and column number
+" set statusline+=%#myInfoColor#
+" set statusline+=\ %{StatusLineFiletype()}\ %{StatusLinePercent()}\ %l:%v
+" set statusline+=\ %*
 
 "=====================================================
 "===================== MAPPINGS ======================
@@ -202,22 +273,14 @@ augroup END
 " With a map leader it's possible to do extra key combinations
 " i.e: <leader>w saves the current file
 let mapleader = ","
-let g:mapleader = ","
-
-" This trigger takes advantage of the fact that the quickfix window can be
-" easily distinguished by its file-type, qf. The wincmd J command is
-" equivalent to the Ctrl+W, Shift+J shortcut telling Vim to move a window to
-" the very bottom (see :help :wincmd and :help ^WJ).
-" autocmd FileType qf wincmd J
 
 " Some useful quickfix shortcuts for quickfix
-":cc      see the current error
-":cn      next error
-":cp      previous error
-":clist   list all errors
-" map <C-n> :lnext<CR>
-" map <C-m> :lprevious<CR>
-nnoremap <leader>a :lclose<CR>
+map <C-n> :cn<CR>
+map <C-m> :cp<CR>
+nnoremap <leader>a :cclose<CR>
+
+" put quickfix window always to the bottom
+autocmd FileType qf wincmd J
 
 " Fast saving
 nnoremap <leader>w :w!<cr>
@@ -229,45 +292,20 @@ nnoremap <space> zz
 " Remove search highlight
 nnoremap <leader><space> :nohlsearch<CR>
 
+" Source the current Vim file
+nnoremap <leader>pr :Runtime<CR>
+
+" Close all but the current one
+nnoremap <leader>o :only<CR>
+
 " Better split switching
 map <C-j> <C-W>j
 map <C-k> <C-W>k
 map <C-h> <C-W>h
 map <C-l> <C-W>l
 
-" Resize window quickly
-" nnoremap <silent> <A-Right> :vertical resize +10<CR>
-" nnoremap <silent> <A-Left> :vertical resize -10<CR>
-" nnoremap <silent> <A-Up> :resize +10<CR>
-" nnoremap <silent> <A-Down> :resize -10<CR>
-if bufwinnr(1)
-  map = <C-W>>
-  map - <C-W><
-endif
-
 " Print full path
 map <C-f> :echo expand("%:p")<cr>
-
-" Terminal settings
-if has('nvim')
-  " Leader q to exit terminal mode. Somehow it jumps to the end, so jump to
-  " the top again
-  tnoremap <Leader>q <C-\><C-n>gg<cr>
-
-  " mappings to move out from terminal to other views
-  tnoremap <C-h> <C-\><C-n><C-w>h
-  tnoremap <C-j> <C-\><C-n><C-w>j
-  tnoremap <C-k> <C-\><C-n><C-w>k
-  tnoremap <C-l> <C-\><C-n><C-w>l
-
-  " Open terminal in vertical, horizontal and new tab
-  " nnoremap <leader>tv :vsplit term://zsh<CR>
-  " nnoremap <leader>ts :split term://zsh<CR>
-  " nnoremap <leader>tt :tabnew term://zsh<CR>
-
-  " always start terminal in insert mode
-  autocmd BufWinEnter,WinEnter term://* startinsert
-endif
 
 " Visual linewise up and down by default (and use gj gk to go quicker)
 noremap <Up> gk
@@ -275,8 +313,8 @@ noremap <Down> gj
 noremap j gj
 noremap k gk
 
-" Just go out in insert mode
-imap jk <ESC>l
+" Exit on jk
+imap jk <Esc>
 
 " Source (reload configuration)
 nnoremap <silent> <F5> :source $MYNVIMRC<CR>
@@ -335,71 +373,106 @@ endfunction
 vnoremap * :<C-u>call <SID>VSetSearch()<CR>//<CR><c-o>
 vnoremap # :<C-u>call <SID>VSetSearch()<CR>??<CR><c-o>
 
-
-" prependend
-function! s:CreateGoDocComment()
+" create a go doc comment based on the word under the cursor
+function! s:create_go_doc_comment()
   norm "zyiw
   execute ":put! z"
-  execute ":norm I# \<Esc>$"
+  execute ":norm I// \<Esc>$"
 endfunction
+nnoremap <leader>ui :<C-u>call <SID>create_go_doc_comment()<CR>
 
-nnoremap <leader>ui :<C-u>call <SID>CreateGoDocComment()<CR>
-
-"====================================================
+"
 "===================== PLUGINS ======================
+"
 
 " ==================== Fugitive ====================
 vnoremap <leader>gb :Gblame<CR>
 nnoremap <leader>gb :Gblame<CR>
 
-" ==================== Vim-go ====================
-let g:go_fmt_fail_silently = 0
-let g:syntastic_go_checkers = ['golint', 'govet', 'errcheck']
-let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['go'] }
+" ==================== vim-go ====================
+let g:go_fmt_fail_silently = 1
 let g:go_fmt_command = "goimports"
 let g:go_autodetect_gopath = 1
-let g:go_term_enabled = 1
-let g:go_snippet_engine = "neosnippet"
+let g:go_list_type = "quickfix"
+let g:go_auto_type_info = 0
+let g:go_echo_command_info= 0
+
 let g:go_highlight_space_tab_error = 0
 let g:go_highlight_array_whitespace_error = 0
 let g:go_highlight_trailing_whitespace_error = 0
 let g:go_highlight_extra_types = 0
-let g:go_highlight_operators = 0
 let g:go_highlight_build_constraints = 1
-
 let g:deoplete#enable_at_startup = 1
 
-au FileType go nmap <Leader>s <Plug>(go-def-split)
-au FileType go nmap <Leader>v <Plug>(go-def-vertical)
-au FileType go nmap <Leader>i <Plug>(go-info)
-au FileType go nmap <Leader>l <Plug>(go-metalinter)
 
-au FileType go nmap <leader>r  <Plug>(go-run)
 
-au FileType go nmap <leader>b  <Plug>(go-build)
-au FileType go nmap <leader>t  <Plug>(go-test)
-au FileType go nmap <leader>dt  <Plug>(go-test-compile)
-au FileType go nmap <Leader>d <Plug>(go-doc)
 
-" I like these more!
+nmap <C-g> :GoDecls<cr>
+imap <C-g> <esc>:<C-u>GoDecls<cr>
+
+" run :GoBuild or :GoTestCompile based on the go file
+function! s:build_go_files()
+  let l:file = expand('%')
+  if l:file =~# '^\f\+_test\.go$'
+    call go#cmd#Test(0, 1)
+  elseif l:file =~# '^\f\+\.go$'
+    call go#cmd#Build(0)
+  endif
+endfunction
+
 augroup go
-    autocmd!
-    autocmd Filetype go command! -bang A call go#alternate#Switch(<bang>0, 'edit')
-    autocmd Filetype go command! -bang AV call go#alternate#Switch(<bang>0, 'vsplit')
-    autocmd Filetype go command! -bang AS call go#alternate#Switch(<bang>0, 'split')
+  autocmd!
+
+  autocmd FileType go nmap <silent> <Leader>v <Plug>(go-def-vertical)
+  autocmd FileType go nmap <silent> <Leader>s <Plug>(go-def-split)
+
+  autocmd FileType go nmap <silent> <Leader>i <Plug>(go-info)
+  autocmd FileType go nmap <silent> <Leader>l <Plug>(go-metalinter)
+
+  autocmd FileType go nmap <silent> <leader>b :<C-u>call <SID>build_go_files()<CR>
+  autocmd FileType go nmap <silent> <leader>t  <Plug>(go-test)
+  autocmd FileType go nmap <silent> <leader>r  <Plug>(go-run)
+  autocmd FileType go nmap <silent> <leader>e  <Plug>(go-install)
+
+  autocmd FileType go nmap <silent> <Leader>d <Plug>(go-doc)
+  autocmd FileType go nmap <silent> <Leader>c <Plug>(go-coverage-toggle)
+
+  " I like these more!
+  autocmd Filetype go command! -bang A call go#alternate#Switch(<bang>0, 'edit')
+  autocmd Filetype go command! -bang AV call go#alternate#Switch(<bang>0, 'vsplit')
+  autocmd Filetype go command! -bang AS call go#alternate#Switch(<bang>0, 'split')
+  autocmd Filetype go command! -bang AT call go#alternate#Switch(<bang>0, 'tabe')
 augroup END
+" Tagbar
+nmap <silent> <F4> :TagbarToggle<CR>
+let g:tagbar_autofocus = 1
+" ==================== FZF ====================
+
+" nnoremap <C-p> :call fzf#run({
+" \  'source':  filter(copy(v:oldfiles), 'v:val !~ "NERD_tree"'),
+" \  'sink':    'e',
+" \  'options': '-m -x +s',
+" \  'down':    '40%'})<CR>
+
+
+" ==================== Completor ====================
+" let g:completor_go_omni_trigger = '(?:\b[^\W\d]\w*|[\]\)])\.(?:[^\W\d]\w*)?'
+" let g:completor_min_chars = 2
+
+" let g:completor_disable_filename = 1
+" let g:completor_disable_buffer = 1
+" let g:completor_disable_ultisnips = 1
 
 " ==================== CtrlP ====================
 let g:ctrlp_cmd = 'CtrlPMRU'
 let g:ctrlp_working_path_mode = 'ra'
-let g:ctrlp_max_height = 10		" maxiumum height of match window
-let g:ctrlp_switch_buffer = 'et'	" jump to a file if it's open already
-let g:ctrlp_mruf_max=450 		" number of recently opened files
-let g:ctrlp_max_files=0  		" do not limit the number of searchable files
+let g:ctrlp_switch_buffer = 'et'  " jump to a file if it's open already
+let g:ctrlp_mruf_max=450    " number of recently opened files
+let g:ctrlp_max_files=0     " do not limit the number of searchable files
 let g:ctrlp_use_caching = 1
 let g:ctrlp_clear_cache_on_exit = 0
 let g:ctrlp_cache_dir = $HOME.'/.cache/ctrlp'
-
+let g:ctrlp_match_window = 'bottom,order:btt,max:10,results:10'
 let g:ctrlp_buftag_types = {'go' : '--language-force=go --golang-types=ftv'}
 
 func! MyCtrlPTag()
@@ -411,56 +484,40 @@ func! MyCtrlPTag()
 endfunc
 command! MyCtrlPTag call MyCtrlPTag()
 
-nmap <C-g> :MyCtrlPTag<cr>
-imap <C-g> <esc>:MyCtrlPTag<cr>
 
 nmap <C-b> :CtrlPCurWD<cr>
 imap <C-b> <esc>:CtrlPCurWD<cr>
 
-" Tagbar
-nmap <silent> <F4> :TagbarToggle<CR>
-let g:tagbar_autofocus = 1
-
-let g:tagbar_type_go = {
-    \ 'ctagstype' : 'go',
-    \ 'kinds'     : [  'p:package', 'i:imports:1', 'c:constants', 'v:variables',
-        \ 't:types',  'n:interfaces', 'w:fields', 'e:embedded', 'm:methods',
-        \ 'r:constructor', 'f:functions' ],
-    \ 'sro' : '.',
-    \ 'kind2scope' : { 't' : 'ctype', 'n' : 'ntype' },
-    \ 'scope2kind' : { 'ctype' : 't', 'ntype' : 'n' },
-    \ 'ctagsbin'  : 'gotags',
-    \ 'ctagsargs' : '-sort -silent'
-    \ }
-
 " ==================== delimitMate ====================
-let g:delimitMate_expand_cr = 1		
-let g:delimitMate_expand_space = 1		
-let g:delimitMate_smart_quotes = 1		
-let g:delimitMate_expand_inside_quotes = 0		
-let g:delimitMate_smart_matchpairs = '^\%(\w\|\$\)'		
+let g:delimitMate_expand_cr = 1   
+let g:delimitMate_expand_space = 1    
+let g:delimitMate_smart_quotes = 1    
+let g:delimitMate_expand_inside_quotes = 0    
+let g:delimitMate_smart_matchpairs = '^\%(\w\|\$\)'   
 
+imap <expr> <CR> pumvisible() ? "\<c-y>" : "<Plug>delimitMateCR"
 
 " ==================== Lightline ====================
 "
 let g:lightline = {
       \ 'active': {
       \   'left': [ [ 'mode', 'paste'],
-      \             [ 'fugitive', 'filename', 'modified', 'ctrlpmark' ],
-      \             [ 'go'] ],
+      \             [ 'fugitive', 'filename', 'modified', 'ctrlpmark', 'go'] ],
       \   'right': [ [ 'lineinfo' ], 
       \              [ 'percent' ], 
       \              [ 'fileformat', 'fileencoding', 'filetype' ] ]
       \ },
-      \ 'inactive': {
-      \   'left': [ [ 'go'] ],
+      \ 'component': {
+      \   'go': '%#goStatuslineColor#%{LightLineGo()}',
+      \ },
+      \ 'component_visible_condition': {
+      \   'go': '(exists("*go#statusline#Show") && ""!=go#statusline#Show())'
       \ },
       \ 'component_function': {
       \   'lineinfo': 'LightLineInfo',
       \   'percent': 'LightLinePercent',
       \   'modified': 'LightLineModified',
       \   'filename': 'LightLineFilename',
-      \   'go': 'LightLineGo',
       \   'fileformat': 'LightLineFileformat',
       \   'filetype': 'LightLineFiletype',
       \   'fileencoding': 'LightLineFileencoding',
@@ -507,8 +564,7 @@ function! LightLineFugitive()
 endfunction
 
 function! LightLineGo()
-  " return ''
-  return exists('*go#jobcontrol#Statusline') ? go#jobcontrol#Statusline() : ''
+  return exists('*go#statusline#Show') ? go#statusline#Show() : ''
 endfunction
 
 function! LightLineMode()
@@ -561,77 +617,56 @@ function! CtrlPStatusFunc_2(str)
   return lightline#statusline(0)
 endfunction
 
-
-" Trigger a highlight in the appropriate direction when pressing these keys:
-let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
-
 " ==================== NerdTree ====================
 " For toggling
 noremap <Leader>n :NERDTreeToggle<cr>
 noremap <Leader>f :NERDTreeFind<cr>
-
 let NERDTreeShowHidden=1
 
 " ==================== vim-json ====================
 let g:vim_json_syntax_conceal = 0
 
-" ==================== completion and snippet =========================
-" I use deoplete for Neovim and neocomplete for Vim.
-if has('nvim')
-  let g:deoplete#enable_at_startup = 1
-  let g:deoplete#ignore_sources = {}
-  let g:deoplete#ignore_sources._ = ['buffer', 'member', 'tag', 'file', 'neosnippet']
-  let g:deoplete#sources#go#sort_class = ['func', 'type', 'var', 'const']
-
-  " Use partial fuzzy matches like YouCompleteMe
-  call deoplete#custom#set('_', 'matchers', ['matcher_full_fuzzy'])
-else
-  let g:neocomplete#enable_at_startup = 1
-  let g:neocomplete#enable_smart_case = 1
-  let g:neocomplete#sources#syntax#min_keyword_length = 3
-
-	if !exists('g:neocomplete#sources')
-	  let g:neocomplete#sources = {}
-	endif
-	let g:neocomplete#sources._ = ['buffer', 'member', 'tag', 'file', 'dictionary']
-	let g:neocomplete#sources.go = ['omni']
-
-  " disable sorting
-	call neocomplete#custom#source('_', 'sorters', [])
-endif
-
-" I want to use my tab more smarter. If we are inside a completion menu jump
-" to the next item. Otherwise check if there is any snippet to expand, if yes
-" expand it. Also if inside a snippet and we need to jump tab jumps. If none
-" of the above matches we just call our usual 'tab'.
-function! s:tab_complete()
-  if pumvisible()
-    return "\<c-n>"
+" ==================== UltiSnips ====================
+function! g:UltiSnips_Complete()
+  call UltiSnips#ExpandSnippet()
+  if g:ulti_expand_res == 0
+    if pumvisible()
+      return "\<C-n>"
+    else
+      call UltiSnips#JumpForwards()
+      if g:ulti_jump_forwards_res == 0
+        return "\<TAB>"
+      endif
+    endif
   endif
-
-  if neosnippet#expandable_or_jumpable() 
-    return "\<Plug>(neosnippet_expand_or_jump)"
-  endif
-
-  return "\<tab>"
+  return ""
 endfunction
-imap <silent><expr><TAB> <SID>tab_complete()
 
-smap <expr><tab> neosnippet#expandable_or_jumpable() ? 
-      \ "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+function! g:UltiSnips_Reverse()
+  call UltiSnips#JumpBackwards()
+  if g:ulti_jump_backwards_res == 0
+    return "\<C-P>"
+  endif
 
-inoremap <silent><expr><s-tab> pumvisible() ? "\<c-p>" : "\<s-tab>"
-imap <silent><expr> <CR> pumvisible() ? "\<C-y>" : '<Plug>delimitMateCR'
+  return ""
+endfunction
 
-autocmd InsertLeave * NeoSnippetClearMarkers
 
-if has('conceal')
-  set conceallevel=2 concealcursor=inv
+if !exists("g:UltiSnipsJumpForwardTrigger")
+  let g:UltiSnipsJumpForwardTrigger = "<tab>"
 endif
 
-" vim:ts=2:sw=2:et
-if has('nvim')
-    :tnoremap <Esc> <C-\><C-n>
-    nnoremap <leader>tss :below 10sp term://$SHELL<cr>
+if !exists("g:UltiSnipsJumpBackwardTrigger")
+  let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
 endif
 
+au InsertEnter * exec "inoremap <silent> " . g:UltiSnipsExpandTrigger . " <C-R>=g:UltiSnips_Complete()<cr>"
+au InsertEnter * exec "inoremap <silent> " . g:UltiSnipsJumpBackwardTrigger . " <C-R>=g:UltiSnips_Reverse()<cr>"
+
+" ==================== Various other plugin settings ====================
+nmap  -  <Plug>(choosewin)
+
+" Trigger a highlight in the appropriate direction when pressing these keys:
+let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
+
+" vim: sw=2 sw=2 et
