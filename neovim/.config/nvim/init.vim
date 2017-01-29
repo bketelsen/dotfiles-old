@@ -31,9 +31,7 @@ endif
 " filetype plugins
 Plug 'vim-ruby/vim-ruby'
 Plug 'elzr/vim-json', {'for' : 'json'}
-Plug 'tejr/vim-tmux', {'for': 'tmux'}
 Plug 'ekalinin/Dockerfile.vim', {'for' : 'Dockerfile'}
-Plug 'fatih/vim-nginx' , {'for' : 'nginx'}
 Plug 'corylanou/vim-present', {'for' : 'present'}
 
 call plug#end()
@@ -356,7 +354,8 @@ nnoremap <leader>gb :Gblame<CR>
 
 " ==================== Vim-go ====================
 let g:go_fmt_fail_silently = 0
-let g:syntastic_go_checkers = ['golint', 'govet', 'gb']
+let g:syntastic_go_checkers = ['golint', 'govet', 'errcheck']
+let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['go'] }
 let g:go_fmt_command = "goimports"
 let g:go_autodetect_gopath = 1
 let g:go_term_enabled = 1
